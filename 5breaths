@@ -1,0 +1,26 @@
+// script.js
+function startBreathing() {
+    let inhaleTime = parseInt(document.getElementById('inhaleTime').value);
+    let exhaleTime = parseInt(document.getElementById('exhaleTime').value);
+    let circle = document.getElementById('breathingCircle');
+    let statusLabel = document.getElementById('statusLabel');
+
+    let isExpanding = true;
+    let remainingTime = inhaleTime;
+    statusLabel.innerText = "Inhaling...";
+
+    const timer = setInterval(() => {
+        if (isExpanding) {
+            circle.style.transform = `scale(${1 + remainingTime / inhaleTime})`;
+        } else {
+            circle.style.transform = `scale(${1 + remainingTime / exhaleTime})`;
+        }
+
+        remainingTime--;
+        if (remainingTime < 0) {
+            isExpanding = !isExpanding;
+            remainingTime = isExpanding ? inhaleTime : exhaleTime;
+            statusLabel.innerText = isExpanding ? "Inhaling..." : "Exhaling...";
+        }
+    }, 1000);
+}
