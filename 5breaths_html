@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breathing App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <h1>Breathing App</h1>
+        <input type="number" id="inhaleTime" placeholder="Inhale Time (s)" value="4">
+        <input type="number" id="exhaleTime" placeholder="Exhale Time (s)" value="8">
+        <button onclick="startBreathing()">Start Breathing</button>
+        <div id="breathingCircle" class="circle"></div>
+        <div id="statusLabel">Press 'Start' to begin.</div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
