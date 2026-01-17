@@ -1,0 +1,49 @@
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+        <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        <rect width="512" height="512" rx="102.4" fill="url(#grad)"/>
+
+        <!-- Phone screen -->
+        <rect x="156.16" y="105.984" width="200.192" height="300.032"
+              rx="19.968" fill="rgba(255,255,255,0.95)"/>
+
+        <!-- Face circle -->
+        <circle cx="256" cy="200.192" r="59.904"
+                stroke="#667eea" stroke-width="6.144" fill="none"/>
+
+        <!-- Left eye X -->
+        <line x1="236.032" y1="184.832" x2="245.76" y2="195.072"
+              stroke="#667eea" stroke-width="6.144" stroke-linecap="round"/>
+        <line x1="245.76" y1="184.832" x2="236.032" y2="195.072"
+              stroke="#667eea" stroke-width="6.144" stroke-linecap="round"/>
+
+        <!-- Right eye X -->
+        <line x1="266.24" y1="184.832" x2="275.968" y2="195.072"
+              stroke="#667eea" stroke-width="6.144" stroke-linecap="round"/>
+        <line x1="275.968" y1="184.832" x2="266.24" y2="195.072"
+              stroke="#667eea" stroke-width="6.144" stroke-linecap="round"/>
+
+        <!-- Sad mouth -->
+        <path d="M 225.792 224.768 Q 256 215.04 286.208 224.768"
+              stroke="#667eea" stroke-width="6.144" fill="none" stroke-linecap="round"/>
+
+        <!-- Chart bars -->
+        <rect x="176.128" y="280.064" width="30.208" height="70.144"
+              rx="5.12" fill="#e74c3c" opacity="0.8"/>
+        <rect x="221.184" y="300.032" width="30.208" height="50.176"
+              rx="5.12" fill="#f39c12" opacity="0.8"/>
+        <rect x="266.24" y="289.792" width="30.208" height="59.904"
+              rx="5.12" fill="#3498db" opacity="0.8"/>
+        <rect x="310.784" y="309.76" width="30.208" height="39.936"
+              rx="5.12" fill="#2ecc71" opacity="0.8"/>
+
+        <!-- Baseline -->
+        <line x1="165.888" y1="350.208" x2="351.232" y2="350.208"
+              stroke="white" stroke-width="3.072" opacity="0.6"/>
+    </svg>
+    
