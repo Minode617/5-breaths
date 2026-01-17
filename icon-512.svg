@@ -1,49 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="110.08" fill="#ffffff"/>
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
-        <defs>
-            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-            </linearGradient>
-        </defs>
-        <rect width="512" height="512" rx="102.4" fill="url(#grad)"/>
+  <!-- Border -->
+  <rect x="9.984" y="9.984" width="492.032" height="492.032" rx="99.84" fill="none" stroke="#000000" stroke-width="3.9936"/>
 
-        <!-- Phone screen -->
-        <rect x="156.16" y="105.984" width="200.192" height="300.032"
-              rx="19.968" fill="rgba(255,255,255,0.95)"/>
+  <!-- Phone outline -->
+  <rect x="156.16" y="105.984" width="200.192" height="300.032" rx="19.968" fill="none" stroke="#000000" stroke-width="3.0208"/>
 
-        <!-- Face circle -->
-        <circle cx="256" cy="200.192" r="59.904"
-                stroke="#667eea" stroke-width="6.144" fill="none"/>
+  <!-- Screen top notch -->
+  <line x1="225.792" y1="105.984" x2="286.208" y2="105.984" stroke="#ffffff" stroke-width="3.9936"/>
 
-        <!-- Left eye X -->
-        <line x1="236.032" y1="184.832" x2="245.76" y2="195.072"
-              stroke="#667eea" stroke-width="6.144" stroke-linecap="round"/>
-        <line x1="245.76" y1="184.832" x2="236.032" y2="195.072"
-              stroke="#667eea" stroke-width="6.144" stroke-linecap="round"/>
+  <!-- Face circle -->
+  <circle cx="256" cy="200.192" r="50.176" fill="none" stroke="#000000" stroke-width="2.5088"/>
 
-        <!-- Right eye X -->
-        <line x1="266.24" y1="184.832" x2="275.968" y2="195.072"
-              stroke="#667eea" stroke-width="6.144" stroke-linecap="round"/>
-        <line x1="275.968" y1="184.832" x2="266.24" y2="195.072"
-              stroke="#667eea" stroke-width="6.144" stroke-linecap="round"/>
+  <!-- Eyes -->
+  <circle cx="236.032" cy="189.952" r="3.9936" fill="#000000"/>
+  <circle cx="275.968" cy="189.952" r="3.9936" fill="#000000"/>
 
-        <!-- Sad mouth -->
-        <path d="M 225.792 224.768 Q 256 215.04 286.208 224.768"
-              stroke="#667eea" stroke-width="6.144" fill="none" stroke-linecap="round"/>
+  <!-- Disappointed mouth -->
+  <path d="M 236.032 220.16 Q 256 209.92 275.968 220.16" stroke="#000000" stroke-width="2.5088" fill="none" stroke-linecap="round"/>
 
-        <!-- Chart bars -->
-        <rect x="176.128" y="280.064" width="30.208" height="70.144"
-              rx="5.12" fill="#e74c3c" opacity="0.8"/>
-        <rect x="221.184" y="300.032" width="30.208" height="50.176"
-              rx="5.12" fill="#f39c12" opacity="0.8"/>
-        <rect x="266.24" y="289.792" width="30.208" height="59.904"
-              rx="5.12" fill="#3498db" opacity="0.8"/>
-        <rect x="310.784" y="309.76" width="30.208" height="39.936"
-              rx="5.12" fill="#2ecc71" opacity="0.8"/>
+  <!-- Chart bars -->
+  <rect x="176.128" y="280.064" width="24.064" height="50.176" rx="3.0208" fill="#000000"/>
+  <rect x="210.944" y="300.032" width="24.064" height="30.208" rx="3.0208" fill="#4a4a4a"/>
+  <rect x="245.76" y="289.792" width="24.064" height="39.936" rx="3.0208" fill="#6b6b6b"/>
+  <rect x="281.088" y="305.152" width="24.064" height="25.088" rx="3.0208" fill="#a0a0a0"/>
 
-        <!-- Baseline -->
-        <line x1="165.888" y1="350.208" x2="351.232" y2="350.208"
-              stroke="white" stroke-width="3.072" opacity="0.6"/>
-    </svg>
+  <!-- Baseline -->
+  <line x1="169.984" y1="330.24" x2="310.784" y2="330.24" stroke="#000000" stroke-width="1.4848" opacity="0.3"/>
+
+  <!-- Gap arrow -->
+  <path d="M 195.072 265.216 L 195.072 274.944 M 189.952 269.824 L 195.072 274.944 L 200.192 269.824" stroke="#000000" stroke-width="1.9968" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
     
