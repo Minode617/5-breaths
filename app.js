@@ -183,7 +183,7 @@ function renderHistory() {
     const historyList = document.getElementById('historyList');
 
     if (records.length === 0) {
-        historyList.innerHTML = '<p class="empty-message">まだ記録がありません</p>';
+        historyList.innerHTML = '<p class="empty-message">No records yet</p>';
         return;
     }
 
@@ -191,7 +191,7 @@ function renderHistory() {
     historyList.innerHTML = sortedRecords.map((record, index) => {
         const gap = record.expectation - record.satisfaction;
         const gapClass = gap > 0 ? 'positive' : gap < 0 ? 'negative' : 'neutral';
-        const gapText = gap > 0 ? `期待外れ: +${gap}` : gap < 0 ? `期待以上: ${gap}` : '期待通り: 0';
+        const gapText = gap > 0 ? `Disappointed: +${gap}` : gap < 0 ? `Better than expected: ${gap}` : 'As expected: 0';
 
         const date = new Date(record.timestamp);
         const dateStr = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(2, '0')}`;
@@ -201,8 +201,8 @@ function renderHistory() {
                 <div class="date">${dateStr}</div>
                 <div class="sns-type">${record.snsType}</div>
                 <div class="values">
-                    <span>期待度: ${record.expectation}</span>
-                    <span>満足度: ${record.satisfaction}</span>
+                    <span>Expectation: ${record.expectation}</span>
+                    <span>Satisfaction: ${record.satisfaction}</span>
                 </div>
                 <div class="gap ${gapClass}">${gapText}</div>
             </div>
@@ -215,7 +215,7 @@ function renderInsights() {
     const container = document.getElementById('insightsContainer');
 
     if (records.length < 3) {
-        container.innerHTML = '<p class="empty-message">記録が3件以上になると、インサイトが表示されます</p>';
+        container.innerHTML = '<p class="empty-message">Insights will appear after 3+ records</p>';
         return;
     }
 
@@ -326,18 +326,18 @@ function initializeCharts() {
             labels: [],
             datasets: [
                 {
-                    label: '期待度',
+                    label: 'Expectation',
                     data: [],
-                    backgroundColor: 'rgba(102, 126, 234, 0.6)',
-                    borderColor: 'rgba(102, 126, 234, 1)',
-                    borderWidth: 2
+                    backgroundColor: 'rgba(26, 26, 26, 0.8)',
+                    borderColor: 'rgba(26, 26, 26, 1)',
+                    borderWidth: 1
                 },
                 {
-                    label: '満足度',
+                    label: 'Satisfaction',
                     data: [],
-                    backgroundColor: 'rgba(118, 75, 162, 0.6)',
-                    borderColor: 'rgba(118, 75, 162, 1)',
-                    borderWidth: 2
+                    backgroundColor: 'rgba(160, 160, 160, 0.6)',
+                    borderColor: 'rgba(160, 160, 160, 1)',
+                    borderWidth: 1
                 }
             ]
         },
@@ -347,7 +347,32 @@ function initializeCharts() {
             scales: {
                 y: {
                     beginAtZero: true,
-                    max: 5
+                    max: 5,
+                    grid: {
+                        color: 'rgba(229, 229, 229, 1)'
+                    },
+                    ticks: {
+                        color: '#6b6b6b'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#6b6b6b'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    labels: {
+                        color: '#1a1a1a',
+                        font: {
+                            size: 12,
+                            weight: '500'
+                        }
+                    }
                 }
             }
         }
@@ -358,13 +383,18 @@ function initializeCharts() {
         data: {
             labels: [],
             datasets: [{
-                label: 'ギャップ（期待 - 現実）',
+                label: 'Gap (Expectation - Reality)',
                 data: [],
-                borderColor: 'rgba(231, 76, 60, 1)',
-                backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                borderColor: 'rgba(26, 26, 26, 1)',
+                backgroundColor: 'rgba(26, 26, 26, 0.05)',
                 borderWidth: 2,
                 fill: true,
-                tension: 0.4
+                tension: 0.4,
+                pointBackgroundColor: 'rgba(26, 26, 26, 1)',
+                pointBorderColor: '#ffffff',
+                pointBorderWidth: 2,
+                pointRadius: 4,
+                pointHoverRadius: 6
             }]
         },
         options: {
@@ -372,18 +402,41 @@ function initializeCharts() {
             maintainAspectRatio: true,
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(229, 229, 229, 1)'
+                    },
+                    ticks: {
+                        color: '#6b6b6b'
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        color: '#6b6b6b'
+                    }
                 }
             },
             plugins: {
+                legend: {
+                    labels: {
+                        color: '#1a1a1a',
+                        font: {
+                            size: 12,
+                            weight: '500'
+                        }
+                    }
+                },
                 annotation: {
                     annotations: {
                         line1: {
                             type: 'line',
                             yMin: 0,
                             yMax: 0,
-                            borderColor: 'rgba(0, 0, 0, 0.3)',
-                            borderWidth: 2,
+                            borderColor: 'rgba(107, 107, 107, 0.5)',
+                            borderWidth: 1,
                             borderDash: [5, 5]
                         }
                     }

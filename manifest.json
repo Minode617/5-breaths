@@ -1,11 +1,11 @@
 {
-  "name": "SNS 反省トラッカー",
-  "short_name": "SNS反省",
-  "description": "SNS使用前の期待と使用後の現実のギャップを可視化するアプリ",
+  "name": "SNS Reflection Tracker",
+  "short_name": "SNS Reflect",
+  "description": "Track the gap between expectation and reality when using SNS",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#667eea",
-  "theme_color": "#667eea",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
   "orientation": "portrait",
   "icons": [
     {

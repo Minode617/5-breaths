@@ -6,8 +6,8 @@
     <title>SNS 反省トラッカー</title>
 
     <!-- PWA Configuration -->
-    <meta name="description" content="SNS使用前の期待と使用後の現実のギャップを可視化するアプリ">
-    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Track the gap between expectation and reality when using SNS">
+    <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="SNS反省">
@@ -25,8 +25,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>📱 SNS 反省トラッカー</h1>
-            <p class="subtitle">SNS使用前の期待と、使用後の現実のギャップを可視化</p>
+            <h1>SNS Reflection Tracker</h1>
+            <p class="subtitle">Track the gap between expectation and reality</p>
         </header>
 
         <div class="main-content">
@@ -54,7 +54,7 @@
                             <button class="rating-btn" data-value="5">5<span>とても期待</span></button>
                         </div>
                     </div>
-                    <button class="btn-primary" id="startBtn" disabled>SNSを見に行く</button>
+                    <button class="btn-primary" id="startBtn" disabled>Go Check SNS →</button>
                 </div>
 
                 <div class="step hidden" id="step2">
@@ -69,15 +69,15 @@
                             <button class="rating-btn" data-value="5">5<span>とても有益</span></button>
                         </div>
                     </div>
-                    <button class="btn-primary" id="submitBtn" disabled>記録する</button>
-                    <button class="btn-secondary" id="cancelBtn">キャンセル</button>
+                    <button class="btn-primary" id="submitBtn" disabled>Save Record</button>
+                    <button class="btn-secondary" id="cancelBtn">Cancel</button>
                 </div>
 
                 <div class="step hidden" id="step3">
                     <div class="result-message">
-                        <h2>記録完了！</h2>
+                        <h2>✓ Record Saved</h2>
                         <p id="resultMessage"></p>
-                        <button class="btn-primary" id="newRecordBtn">新しく記録する</button>
+                        <button class="btn-primary" id="newRecordBtn">New Record</button>
                     </div>
                 </div>
             </section>
@@ -85,53 +85,53 @@
             <!-- 統計セクション -->
             <section class="stats-section">
                 <div class="tabs">
-                    <button class="tab-btn active" data-tab="overview">概要</button>
-                    <button class="tab-btn" data-tab="history">履歴</button>
-                    <button class="tab-btn" data-tab="insights">インサイト</button>
+                    <button class="tab-btn active" data-tab="overview">Overview</button>
+                    <button class="tab-btn" data-tab="history">History</button>
+                    <button class="tab-btn" data-tab="insights">Insights</button>
                 </div>
 
                 <div class="tab-content active" id="overview">
                     <div class="stats-grid">
                         <div class="stat-card">
-                            <h3>総記録数</h3>
+                            <h3>Total Records</h3>
                             <div class="stat-value" id="totalRecords">0</div>
                         </div>
                         <div class="stat-card">
-                            <h3>平均期待度</h3>
+                            <h3>Avg. Expectation</h3>
                             <div class="stat-value" id="avgExpectation">-</div>
                         </div>
                         <div class="stat-card">
-                            <h3>平均満足度</h3>
+                            <h3>Avg. Satisfaction</h3>
                             <div class="stat-value" id="avgSatisfaction">-</div>
                         </div>
                         <div class="stat-card highlight">
-                            <h3>平均ギャップ</h3>
+                            <h3>Avg. Gap</h3>
                             <div class="stat-value" id="avgGap">-</div>
-                            <div class="stat-subtitle">期待 - 現実</div>
+                            <div class="stat-subtitle">Expectation - Reality</div>
                         </div>
                     </div>
 
                     <div class="chart-container">
-                        <h3>期待 vs 現実</h3>
+                        <h3>Expectation vs Reality</h3>
                         <canvas id="comparisonChart"></canvas>
                     </div>
 
                     <div class="chart-container">
-                        <h3>ギャップの推移</h3>
+                        <h3>Gap Trend</h3>
                         <canvas id="gapTrendChart"></canvas>
                     </div>
                 </div>
 
                 <div class="tab-content" id="history">
                     <div class="history-list" id="historyList">
-                        <p class="empty-message">まだ記録がありません</p>
+                        <p class="empty-message">No records yet</p>
                     </div>
-                    <button class="btn-secondary" id="clearDataBtn">全データを削除</button>
+                    <button class="btn-secondary" id="clearDataBtn">Delete All Data</button>
                 </div>
 
                 <div class="tab-content" id="insights">
                     <div class="insights-container" id="insightsContainer">
-                        <p class="empty-message">記録が3件以上になると、インサイトが表示されます</p>
+                        <p class="empty-message">Insights will appear after 3+ records</p>
                     </div>
                 </div>
             </section>

@@ -1,49 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192">
+  <!-- Background -->
+  <rect width="192" height="192" rx="41.28" fill="#ffffff"/>
 
-    <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192">
-        <defs>
-            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-            </linearGradient>
-        </defs>
-        <rect width="192" height="192" rx="38.400000000000006" fill="url(#grad)"/>
+  <!-- Border -->
+  <rect x="3.7439999999999998" y="3.7439999999999998" width="184.512" height="184.512" rx="37.44" fill="none" stroke="#000000" stroke-width="1.4975999999999998"/>
 
-        <!-- Phone screen -->
-        <rect x="58.56" y="39.744" width="75.072" height="112.512"
-              rx="7.4879999999999995" fill="rgba(255,255,255,0.95)"/>
+  <!-- Phone outline -->
+  <rect x="58.56" y="39.744" width="75.072" height="112.512" rx="7.4879999999999995" fill="none" stroke="#000000" stroke-width="1.1328"/>
 
-        <!-- Face circle -->
-        <circle cx="96" cy="75.072" r="22.464000000000002"
-                stroke="#667eea" stroke-width="2.3040000000000003" fill="none"/>
+  <!-- Screen top notch -->
+  <line x1="84.672" y1="39.744" x2="107.328" y2="39.744" stroke="#ffffff" stroke-width="1.4975999999999998"/>
 
-        <!-- Left eye X -->
-        <line x1="88.512" y1="69.312" x2="92.16" y2="73.152"
-              stroke="#667eea" stroke-width="2.3040000000000003" stroke-linecap="round"/>
-        <line x1="92.16" y1="69.312" x2="88.512" y2="73.152"
-              stroke="#667eea" stroke-width="2.3040000000000003" stroke-linecap="round"/>
+  <!-- Face circle -->
+  <circle cx="96" cy="75.072" r="18.816000000000003" fill="none" stroke="#000000" stroke-width="0.9408"/>
 
-        <!-- Right eye X -->
-        <line x1="99.84" y1="69.312" x2="103.488" y2="73.152"
-              stroke="#667eea" stroke-width="2.3040000000000003" stroke-linecap="round"/>
-        <line x1="103.488" y1="69.312" x2="99.84" y2="73.152"
-              stroke="#667eea" stroke-width="2.3040000000000003" stroke-linecap="round"/>
+  <!-- Eyes -->
+  <circle cx="88.512" cy="71.232" r="1.4975999999999998" fill="#000000"/>
+  <circle cx="103.488" cy="71.232" r="1.4975999999999998" fill="#000000"/>
 
-        <!-- Sad mouth -->
-        <path d="M 84.672 84.288 Q 96 80.64 107.328 84.288"
-              stroke="#667eea" stroke-width="2.3040000000000003" fill="none" stroke-linecap="round"/>
+  <!-- Disappointed mouth -->
+  <path d="M 88.512 82.56 Q 96 78.72 103.488 82.56" stroke="#000000" stroke-width="0.9408" fill="none" stroke-linecap="round"/>
 
-        <!-- Chart bars -->
-        <rect x="66.048" y="105.024" width="11.328" height="26.304000000000002"
-              rx="1.92" fill="#e74c3c" opacity="0.8"/>
-        <rect x="82.944" y="112.512" width="11.328" height="18.816000000000003"
-              rx="1.92" fill="#f39c12" opacity="0.8"/>
-        <rect x="99.84" y="108.672" width="11.328" height="22.464000000000002"
-              rx="1.92" fill="#3498db" opacity="0.8"/>
-        <rect x="116.544" y="116.16" width="11.328" height="14.975999999999999"
-              rx="1.92" fill="#2ecc71" opacity="0.8"/>
+  <!-- Chart bars -->
+  <rect x="66.048" y="105.024" width="9.024000000000001" height="18.816000000000003" rx="1.1328" fill="#000000"/>
+  <rect x="79.104" y="112.512" width="9.024000000000001" height="11.328" rx="1.1328" fill="#4a4a4a"/>
+  <rect x="92.16" y="108.672" width="9.024000000000001" height="14.975999999999999" rx="1.1328" fill="#6b6b6b"/>
+  <rect x="105.40800000000002" y="114.43199999999999" width="9.024000000000001" height="9.408000000000001" rx="1.1328" fill="#a0a0a0"/>
 
-        <!-- Baseline -->
-        <line x1="62.208" y1="131.328" x2="131.71200000000002" y2="131.328"
-              stroke="white" stroke-width="1.1520000000000001" opacity="0.6"/>
-    </svg>
+  <!-- Baseline -->
+  <line x1="63.744" y1="123.84" x2="116.544" y2="123.84" stroke="#000000" stroke-width="0.5568" opacity="0.3"/>
+
+  <!-- Gap arrow -->
+  <path d="M 73.152 99.456 L 73.152 103.10400000000001 M 71.232 101.184 L 73.152 103.10400000000001 L 75.072 101.184" stroke="#000000" stroke-width="0.7487999999999999" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
     
