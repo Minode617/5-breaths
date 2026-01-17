@@ -2,8 +2,8 @@
   "name": "SNS Reflection Tracker",
   "short_name": "SNS Reflect",
   "description": "Track the gap between expectation and reality when using SNS",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "/5-breaths/",
+  "scope": "/5-breaths/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
@@ -29,7 +29,7 @@
       "name": "New Record",
       "short_name": "Record",
       "description": "Track your SNS usage",
-      "url": "./",
+      "url": "/5-breaths/",
       "icons": [
         {
           "src": "icon-192.png",
