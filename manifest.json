@@ -2,7 +2,8 @@
   "name": "SNS Reflection Tracker",
   "short_name": "SNS Reflect",
   "description": "Track the gap between expectation and reality when using SNS",
-  "start_url": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
@@ -25,10 +26,10 @@
   "screenshots": [],
   "shortcuts": [
     {
-      "name": "新しい記録",
-      "short_name": "記録",
-      "description": "SNS使用を記録する",
-      "url": "/",
+      "name": "New Record",
+      "short_name": "Record",
+      "description": "Track your SNS usage",
+      "url": "./",
       "icons": [
         {
           "src": "icon-192.png",
