@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNS 反省トラッカー</title>
+
+    <!-- PWA Configuration -->
+    <meta name="description" content="SNS使用前の期待と使用後の現実のギャップを可視化するアプリ">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SNS反省">
+
+    <!-- Icons for iOS -->
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📱 SNS 反省トラッカー</h1>
+            <p class="subtitle">SNS使用前の期待と、使用後の現実のギャップを可視化</p>
+        </header>
+
+        <div class="main-content">
+            <!-- 記録セクション -->
+            <section class="record-section" id="recordSection">
+                <div class="step" id="step1">
+                    <h2>Step 1: SNSを見る前に</h2>
+                    <p>どのSNSを見ますか？</p>
+                    <select id="snsType">
+                        <option value="Twitter/X">Twitter/X</option>
+                        <option value="Instagram">Instagram</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="TikTok">TikTok</option>
+                        <option value="YouTube">YouTube</option>
+                        <option value="その他">その他</option>
+                    </select>
+
+                    <p>どれくらい有益だと期待していますか？</p>
+                    <div class="rating-container">
+                        <div class="rating-buttons" id="expectationRating">
+                            <button class="rating-btn" data-value="1">1<span>全く期待しない</span></button>
+                            <button class="rating-btn" data-value="2">2<span>あまり期待しない</span></button>
+                            <button class="rating-btn" data-value="3">3<span>普通</span></button>
+                            <button class="rating-btn" data-value="4">4<span>やや期待</span></button>
+                            <button class="rating-btn" data-value="5">5<span>とても期待</span></button>
+                        </div>
+                    </div>
+                    <button class="btn-primary" id="startBtn" disabled>SNSを見に行く</button>
+                </div>
+
+                <div class="step hidden" id="step2">
+                    <h2>Step 2: SNSを見た後に</h2>
+                    <p>実際にどれくらい有益でしたか？</p>
+                    <div class="rating-container">
+                        <div class="rating-buttons" id="satisfactionRating">
+                            <button class="rating-btn" data-value="1">1<span>全く無益</span></button>
+                            <button class="rating-btn" data-value="2">2<span>あまり有益でない</span></button>
+                            <button class="rating-btn" data-value="3">3<span>普通</span></button>
+                            <button class="rating-btn" data-value="4">4<span>やや有益</span></button>
+                            <button class="rating-btn" data-value="5">5<span>とても有益</span></button>
+                        </div>
+                    </div>
+                    <button class="btn-primary" id="submitBtn" disabled>記録する</button>
+                    <button class="btn-secondary" id="cancelBtn">キャンセル</button>
+                </div>
+
+                <div class="step hidden" id="step3">
+                    <div class="result-message">
+                        <h2>記録完了！</h2>
+                        <p id="resultMessage"></p>
+                        <button class="btn-primary" id="newRecordBtn">新しく記録する</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 統計セクション -->
+            <section class="stats-section">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="overview">概要</button>
+                    <button class="tab-btn" data-tab="history">履歴</button>
+                    <button class="tab-btn" data-tab="insights">インサイト</button>
+                </div>
+
+                <div class="tab-content active" id="overview">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>総記録数</h3>
+                            <div class="stat-value" id="totalRecords">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>平均期待度</h3>
+                            <div class="stat-value" id="avgExpectation">-</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>平均満足度</h3>
+                            <div class="stat-value" id="avgSatisfaction">-</div>
+                        </div>
+                        <div class="stat-card highlight">
+                            <h3>平均ギャップ</h3>
+                            <div class="stat-value" id="avgGap">-</div>
+                            <div class="stat-subtitle">期待 - 現実</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>期待 vs 現実</h3>
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>ギャップの推移</h3>
+                        <canvas id="gapTrendChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="history">
+                    <div class="history-list" id="historyList">
+                        <p class="empty-message">まだ記録がありません</p>
+                    </div>
+                    <button class="btn-secondary" id="clearDataBtn">全データを削除</button>
+                </div>
+
+                <div class="tab-content" id="insights">
+                    <div class="insights-container" id="insightsContainer">
+                        <p class="empty-message">記録が3件以上になると、インサイトが表示されます</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="app.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker registered:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('ServiceWorker registration failed:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アイコン生成ツール</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+        canvas {
+            border: 2px solid #ddd;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 10px;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        .instruction {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .instruction ol {
+            margin-left: 20px;
+        }
+        .instruction li {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 PWA アイコン生成ツール</h1>
+
+        <h2>192x192 アイコン</h2>
+        <canvas id="canvas192" width="192" height="192"></canvas>
+        <br>
+        <button onclick="downloadIcon(192)">192x192をダウンロード</button>
+
+        <h2>512x512 アイコン</h2>
+        <canvas id="canvas512" width="512" height="512"></canvas>
+        <br>
+        <button onclick="downloadIcon(512)">512x512をダウンロード</button>
+
+        <div class="instruction">
+            <h3>使い方</h3>
+            <ol>
+                <li>上のボタンをクリックして、<code>icon-192.png</code>と<code>icon-512.png</code>をダウンロード</li>
+                <li>ダウンロードしたファイルをプロジェクトのルートディレクトリに配置</li>
+                <li><code>index.html</code>をスマホのブラウザで開く</li>
+                <li>ブラウザのメニューから「ホーム画面に追加」を選択</li>
+                <li>完成！ホーム画面からアプリを起動できます</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        function drawIcon(canvas) {
+            const ctx = canvas.getContext('2d');
+            const size = canvas.width;
+            const scale = size / 512;
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(1, '#764ba2');
+
+            // Rounded rectangle background
+            ctx.fillStyle = gradient;
+            roundRect(ctx, 0, 0, size, size, 110 * scale);
+            ctx.fill();
+
+            // Phone screen
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+            roundRect(ctx, 156 * scale, 106 * scale, 200 * scale, 300 * scale, 20 * scale);
+            ctx.fill();
+
+            // Face circle
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 6 * scale;
+            ctx.beginPath();
+            ctx.arc(256 * scale, 200 * scale, 60 * scale, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Eyes (X shape - disappointed)
+            ctx.lineCap = 'round';
+
+            // Left eye
+            ctx.beginPath();
+            ctx.moveTo(236 * scale, 185 * scale);
+            ctx.lineTo(246 * scale, 195 * scale);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(246 * scale, 185 * scale);
+            ctx.lineTo(236 * scale, 195 * scale);
+            ctx.stroke();
+
+            // Right eye
+            ctx.beginPath();
+            ctx.moveTo(266 * scale, 185 * scale);
+            ctx.lineTo(276 * scale, 195 * scale);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(276 * scale, 185 * scale);
+            ctx.lineTo(266 * scale, 195 * scale);
+            ctx.stroke();
+
+            // Sad mouth
+            ctx.beginPath();
+            ctx.moveTo(226 * scale, 225 * scale);
+            ctx.quadraticCurveTo(256 * scale, 215 * scale, 286 * scale, 225 * scale);
+            ctx.stroke();
+
+            // Chart bars
+            const bars = [
+                { x: 176, y: 280, w: 30, h: 70, color: '#e74c3c' },
+                { x: 221, y: 300, w: 30, h: 50, color: '#f39c12' },
+                { x: 266, y: 290, w: 30, h: 60, color: '#3498db' },
+                { x: 311, y: 310, w: 30, h: 40, color: '#2ecc71' }
+            ];
+
+            bars.forEach(bar => {
+                ctx.fillStyle = bar.color;
+                ctx.globalAlpha = 0.8;
+                roundRect(ctx, bar.x * scale, bar.y * scale, bar.w * scale, bar.h * scale, 5 * scale);
+                ctx.fill();
+            });
+
+            // Baseline
+            ctx.globalAlpha = 0.6;
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 3 * scale;
+            ctx.beginPath();
+            ctx.moveTo(166 * scale, 350 * scale);
+            ctx.lineTo(351 * scale, 350 * scale);
+            ctx.stroke();
+
+            ctx.globalAlpha = 1.0;
+        }
+
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        }
+
+        function downloadIcon(size) {
+            const canvas = document.getElementById(`canvas${size}`);
+            const link = document.createElement('a');
+            link.download = `icon-${size}.png`;
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Draw icons on load
+        window.onload = () => {
+            drawIcon(document.getElementById('canvas192'));
+            drawIcon(document.getElementById('canvas512'));
+        };
+    </script>
+</body>
+</html>
