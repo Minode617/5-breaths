@@ -1,12 +1,12 @@
 {
-  "name": "SNS Reflection Tracker",
-  "short_name": "SNS Reflect",
-  "description": "Track the gap between expectation and reality when using SNS",
+  "name": "仏教思想 - 悟りへの対話",
+  "short_name": "仏教思想",
+  "description": "空海、道元、親鸞の視点で人生の悩みに向き合う",
   "start_url": "/5-breaths/",
   "scope": "/5-breaths/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#0f0f1a",
+  "theme_color": "#1a1a2e",
   "orientation": "portrait",
   "icons": [
     {
@@ -22,13 +22,13 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["productivity", "lifestyle", "health"],
+  "categories": ["education", "lifestyle", "health"],
   "screenshots": [],
   "shortcuts": [
     {
-      "name": "New Record",
-      "short_name": "Record",
-      "description": "Track your SNS usage",
+      "name": "空海と対話",
+      "short_name": "空海",
+      "description": "真言密教の開祖と対話",
       "url": "/5-breaths/",
       "icons": [
         {

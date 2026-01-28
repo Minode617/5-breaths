@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sns-tracker-v3';
+const CACHE_NAME = 'buddhist-chat-v1';
 const urlsToCache = [
   '/5-breaths/',
   '/5-breaths/index.html',
@@ -6,8 +6,7 @@ const urlsToCache = [
   '/5-breaths/app.js',
   '/5-breaths/manifest.json',
   '/5-breaths/icon-192.png',
-  '/5-breaths/icon-512.png',
-  'https://cdn.jsdelivr.net/npm/chart.js'
+  '/5-breaths/icon-512.png'
 ];
 
 // インストール時にキャッシュを作成

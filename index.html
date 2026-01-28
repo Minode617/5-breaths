@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SNS 反省トラッカー</title>
+    <title>仏教思想 - 悟りへの対話</title>
 
     <!-- PWA Configuration -->
-    <meta name="description" content="Track the gap between expectation and reality when using SNS">
-    <meta name="theme-color" content="#000000">
+    <meta name="description" content="空海、道元、親鸞の視点で人生の悩みに向き合う">
+    <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="SNS反省">
+    <meta name="apple-mobile-web-app-title" content="仏教思想">
 
     <!-- Icons for iOS -->
     <link rel="apple-touch-icon" href="icon-192.png">
@@ -23,122 +23,196 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>SNS Reflection Tracker</h1>
-            <p class="subtitle">Track the gap between expectation and reality</p>
-        </header>
+    <div class="app-container">
+        <!-- Host Selection Screen -->
+        <section class="host-selection" id="hostSelection">
+            <div class="selection-header">
+                <h1>仏教思想への招待</h1>
+                <p class="subtitle">今日のホストを選んでください</p>
+            </div>
 
-        <div class="main-content">
-            <!-- 記録セクション -->
-            <section class="record-section" id="recordSection">
-                <div class="step" id="step1">
-                    <h2>Step 1: SNSを見る前に</h2>
-                    <p>どのSNSを見ますか？</p>
-                    <select id="snsType">
-                        <option value="Twitter/X">Twitter/X</option>
-                        <option value="Instagram">Instagram</option>
-                        <option value="Facebook">Facebook</option>
-                        <option value="TikTok">TikTok</option>
-                        <option value="YouTube">YouTube</option>
-                        <option value="その他">その他</option>
-                    </select>
-
-                    <p>どれくらい有益だと期待していますか？</p>
-                    <div class="rating-container">
-                        <div class="rating-buttons" id="expectationRating">
-                            <button class="rating-btn" data-value="1">1<span>全く期待しない</span></button>
-                            <button class="rating-btn" data-value="2">2<span>あまり期待しない</span></button>
-                            <button class="rating-btn" data-value="3">3<span>普通</span></button>
-                            <button class="rating-btn" data-value="4">4<span>やや期待</span></button>
-                            <button class="rating-btn" data-value="5">5<span>とても期待</span></button>
-                        </div>
+            <div class="hosts-grid">
+                <!-- 空海 -->
+                <div class="host-card" data-host="kukai">
+                    <div class="host-avatar kukai">
+                        <svg viewBox="0 0 100 100" class="avatar-svg">
+                            <!-- 背景円 -->
+                            <circle cx="50" cy="50" r="48" fill="url(#kukai-gradient)"/>
+                            <!-- 顔 -->
+                            <ellipse cx="50" cy="52" rx="28" ry="32" fill="#fce4c4"/>
+                            <!-- 髪 -->
+                            <path d="M22 45 Q25 20 50 18 Q75 20 78 45 Q75 35 50 33 Q25 35 22 45" fill="#1a1a2e"/>
+                            <!-- 眉 -->
+                            <path d="M35 42 Q40 39 45 42" stroke="#3d3d3d" stroke-width="1.5" fill="none"/>
+                            <path d="M55 42 Q60 39 65 42" stroke="#3d3d3d" stroke-width="1.5" fill="none"/>
+                            <!-- 目 -->
+                            <ellipse cx="40" cy="48" rx="4" ry="3" fill="#1a1a2e"/>
+                            <ellipse cx="60" cy="48" rx="4" ry="3" fill="#1a1a2e"/>
+                            <circle cx="41" cy="47" r="1.5" fill="#fff"/>
+                            <circle cx="61" cy="47" r="1.5" fill="#fff"/>
+                            <!-- 鼻 -->
+                            <path d="M50 52 L48 58 Q50 60 52 58 L50 52" fill="#e8c9a4"/>
+                            <!-- 口 -->
+                            <path d="M44 66 Q50 70 56 66" stroke="#c98a7b" stroke-width="2" fill="none"/>
+                            <!-- 袈裟 -->
+                            <path d="M25 82 Q50 75 75 82 L80 100 L20 100 Z" fill="#8b4513"/>
+                            <path d="M30 85 Q50 78 70 85" stroke="#d4a574" stroke-width="2" fill="none"/>
+                            <!-- 装飾（密教の珠） -->
+                            <circle cx="50" cy="25" r="4" fill="#ffd700"/>
+                            <defs>
+                                <linearGradient id="kukai-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#667eea"/>
+                                    <stop offset="100%" style="stop-color:#764ba2"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
                     </div>
-                    <button class="btn-primary" id="startBtn" disabled>Go Check SNS →</button>
-                </div>
-
-                <div class="step hidden" id="step2">
-                    <h2>Step 2: SNSを見た後に</h2>
-                    <p>実際にどれくらい有益でしたか？</p>
-                    <div class="rating-container">
-                        <div class="rating-buttons" id="satisfactionRating">
-                            <button class="rating-btn" data-value="1">1<span>全く無益</span></button>
-                            <button class="rating-btn" data-value="2">2<span>あまり有益でない</span></button>
-                            <button class="rating-btn" data-value="3">3<span>普通</span></button>
-                            <button class="rating-btn" data-value="4">4<span>やや有益</span></button>
-                            <button class="rating-btn" data-value="5">5<span>とても有益</span></button>
-                        </div>
-                    </div>
-                    <button class="btn-primary" id="submitBtn" disabled>Save Record</button>
-                    <button class="btn-secondary" id="cancelBtn">Cancel</button>
-                </div>
-
-                <div class="step hidden" id="step3">
-                    <div class="result-message">
-                        <h2>✓ Record Saved</h2>
-                        <p id="resultMessage"></p>
-                        <button class="btn-primary" id="newRecordBtn">New Record</button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 統計セクション -->
-            <section class="stats-section">
-                <div class="tabs">
-                    <button class="tab-btn active" data-tab="overview">Overview</button>
-                    <button class="tab-btn" data-tab="history">History</button>
-                    <button class="tab-btn" data-tab="insights">Insights</button>
-                </div>
-
-                <div class="tab-content active" id="overview">
-                    <div class="stats-grid">
-                        <div class="stat-card">
-                            <h3>Total Records</h3>
-                            <div class="stat-value" id="totalRecords">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Avg. Expectation</h3>
-                            <div class="stat-value" id="avgExpectation">-</div>
-                        </div>
-                        <div class="stat-card">
-                            <h3>Avg. Satisfaction</h3>
-                            <div class="stat-value" id="avgSatisfaction">-</div>
-                        </div>
-                        <div class="stat-card highlight">
-                            <h3>Avg. Gap</h3>
-                            <div class="stat-value" id="avgGap">-</div>
-                            <div class="stat-subtitle">Expectation - Reality</div>
-                        </div>
-                    </div>
-
-                    <div class="chart-container">
-                        <h3>Expectation vs Reality</h3>
-                        <canvas id="comparisonChart"></canvas>
-                    </div>
-
-                    <div class="chart-container">
-                        <h3>Gap Trend</h3>
-                        <canvas id="gapTrendChart"></canvas>
+                    <h2 class="host-name">空海</h2>
+                    <p class="host-title">真言密教の開祖</p>
+                    <p class="host-desc">「即身成仏」の教え。今この身のままで悟りに至れる。宇宙の真理と一体となる道を示す。</p>
+                    <div class="host-keywords">
+                        <span>密教</span>
+                        <span>曼荼羅</span>
+                        <span>即身成仏</span>
                     </div>
                 </div>
 
-                <div class="tab-content" id="history">
-                    <div class="history-list" id="historyList">
-                        <p class="empty-message">No records yet</p>
+                <!-- 道元 -->
+                <div class="host-card" data-host="dogen">
+                    <div class="host-avatar dogen">
+                        <svg viewBox="0 0 100 100" class="avatar-svg">
+                            <!-- 背景円 -->
+                            <circle cx="50" cy="50" r="48" fill="url(#dogen-gradient)"/>
+                            <!-- 顔 -->
+                            <ellipse cx="50" cy="52" rx="26" ry="30" fill="#f5deb3"/>
+                            <!-- 剃髪 -->
+                            <ellipse cx="50" cy="35" rx="24" ry="18" fill="#d4c4a8"/>
+                            <!-- 眉（凛々しい） -->
+                            <path d="M33 43 L45 41" stroke="#3d3d3d" stroke-width="2" fill="none"/>
+                            <path d="M55 41 L67 43" stroke="#3d3d3d" stroke-width="2" fill="none"/>
+                            <!-- 目（鋭い） -->
+                            <path d="M36 48 Q40 46 44 48 Q40 51 36 48" fill="#1a1a2e"/>
+                            <path d="M56 48 Q60 46 64 48 Q60 51 56 48" fill="#1a1a2e"/>
+                            <circle cx="40" cy="48" r="1" fill="#fff"/>
+                            <circle cx="60" cy="48" r="1" fill="#fff"/>
+                            <!-- 鼻 -->
+                            <path d="M50 50 L47 57 Q50 59 53 57 L50 50" fill="#dfc59d"/>
+                            <!-- 口（引き締まった） -->
+                            <path d="M45 65 L55 65" stroke="#a67c6d" stroke-width="2" fill="none"/>
+                            <!-- 僧衣 -->
+                            <path d="M28 80 Q50 72 72 80 L78 100 L22 100 Z" fill="#2d2d2d"/>
+                            <path d="M32 82 Q50 76 68 82" stroke="#4a4a4a" stroke-width="1.5" fill="none"/>
+                            <defs>
+                                <linearGradient id="dogen-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#11998e"/>
+                                    <stop offset="100%" style="stop-color:#38ef7d"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
                     </div>
-                    <button class="btn-secondary" id="clearDataBtn">Delete All Data</button>
+                    <h2 class="host-name">道元</h2>
+                    <p class="host-title">曹洞宗の開祖</p>
+                    <p class="host-desc">「只管打坐」の教え。ただひたすら坐禅する。悟りを求めず、今この瞬間に全てがある。</p>
+                    <div class="host-keywords">
+                        <span>禅</span>
+                        <span>只管打坐</span>
+                        <span>正法眼蔵</span>
+                    </div>
                 </div>
 
-                <div class="tab-content" id="insights">
-                    <div class="insights-container" id="insightsContainer">
-                        <p class="empty-message">Insights will appear after 3+ records</p>
+                <!-- 親鸞 -->
+                <div class="host-card" data-host="shinran">
+                    <div class="host-avatar shinran">
+                        <svg viewBox="0 0 100 100" class="avatar-svg">
+                            <!-- 背景円 -->
+                            <circle cx="50" cy="50" r="48" fill="url(#shinran-gradient)"/>
+                            <!-- 顔 -->
+                            <ellipse cx="50" cy="52" rx="27" ry="31" fill="#ffe4c9"/>
+                            <!-- 髪（やや長め） -->
+                            <path d="M23 50 Q20 25 50 20 Q80 25 77 50 Q70 35 50 32 Q30 35 23 50" fill="#2d2d2d"/>
+                            <!-- 眉（優しい） -->
+                            <path d="M34 44 Q40 42 46 44" stroke="#4a4a4a" stroke-width="1.5" fill="none"/>
+                            <path d="M54 44 Q60 42 66 44" stroke="#4a4a4a" stroke-width="1.5" fill="none"/>
+                            <!-- 目（穏やか） -->
+                            <ellipse cx="40" cy="50" rx="4" ry="4" fill="#1a1a2e"/>
+                            <ellipse cx="60" cy="50" rx="4" ry="4" fill="#1a1a2e"/>
+                            <circle cx="41" cy="49" r="1.5" fill="#fff"/>
+                            <circle cx="61" cy="49" r="1.5" fill="#fff"/>
+                            <!-- 鼻 -->
+                            <path d="M50 52 L48 59 Q50 61 52 59 L50 52" fill="#ebd4b8"/>
+                            <!-- 口（微笑み） -->
+                            <path d="M43 67 Q50 72 57 67" stroke="#c98a7b" stroke-width="2" fill="none"/>
+                            <!-- 墨染の衣 -->
+                            <path d="M26 82 Q50 74 74 82 L80 100 L20 100 Z" fill="#4a3728"/>
+                            <path d="M30 84 Q50 78 70 84" stroke="#6b5344" stroke-width="1.5" fill="none"/>
+                            <!-- 念珠 -->
+                            <circle cx="35" cy="90" r="2" fill="#8b7355"/>
+                            <circle cx="40" cy="92" r="2" fill="#8b7355"/>
+                            <circle cx="45" cy="93" r="2" fill="#8b7355"/>
+                            <defs>
+                                <linearGradient id="shinran-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#f093fb"/>
+                                    <stop offset="100%" style="stop-color:#f5576c"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h2 class="host-name">親鸞</h2>
+                    <p class="host-title">浄土真宗の開祖</p>
+                    <p class="host-desc">「他力本願」の教え。煩悩を抱えたままでも救われる。阿弥陀仏の慈悲に身を委ねる。</p>
+                    <div class="host-keywords">
+                        <span>念仏</span>
+                        <span>他力本願</span>
+                        <span>悪人正機</span>
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
+
+        <!-- Chat Screen -->
+        <section class="chat-screen hidden" id="chatScreen">
+            <header class="chat-header">
+                <button class="back-btn" id="backBtn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <div class="current-host">
+                    <div class="host-mini-avatar" id="currentHostAvatar"></div>
+                    <div class="host-info">
+                        <h2 id="currentHostName">空海</h2>
+                        <p id="currentHostTitle">真言密教の開祖</p>
+                    </div>
+                </div>
+            </header>
+
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will be inserted here -->
+            </div>
+
+            <div class="chat-input-container">
+                <div class="suggested-topics" id="suggestedTopics">
+                    <button class="topic-btn" data-topic="人生の意味とは何でしょうか？">人生の意味</button>
+                    <button class="topic-btn" data-topic="苦しみから解放されるにはどうすればいいですか？">苦しみ</button>
+                    <button class="topic-btn" data-topic="心の平安を得るにはどうすればいいですか？">心の平安</button>
+                    <button class="topic-btn" data-topic="日々の生活で実践できることは何ですか？">日常の実践</button>
+                </div>
+                <div class="input-wrapper">
+                    <textarea
+                        id="userInput"
+                        placeholder="あなたの悩みや疑問を聞かせてください..."
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="sendBtn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
 
     <!-- Service Worker Registration -->
