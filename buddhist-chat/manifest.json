@@ -1,0 +1,41 @@
+{
+  "name": "仏教思想 - 悟りへの対話",
+  "short_name": "仏教思想",
+  "description": "空海、道元、親鸞の視点で人生の悩みに向き合う",
+  "start_url": "/5-breaths/buddhist-chat/",
+  "scope": "/5-breaths/buddhist-chat/",
+  "display": "standalone",
+  "background_color": "#0f0f1a",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "lifestyle", "health"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "空海と対話",
+      "short_name": "空海",
+      "description": "真言密教の開祖と対話",
+      "url": "/5-breaths/buddhist-chat/",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
