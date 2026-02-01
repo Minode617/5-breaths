@@ -46,9 +46,13 @@ class MeetingTranscriber {
             addSpeakerBtn: document.getElementById('addSpeakerBtn'),
 
             // 設定
+            audioSource: document.getElementById('audioSource'),
             language: document.getElementById('language'),
             speakerDetection: document.getElementById('speakerDetection'),
             autoSave: document.getElementById('autoSave'),
+
+            // フッター
+            footerTip: document.getElementById('footerTip'),
 
             // 表示
             statusDot: document.getElementById('statusDot'),
@@ -104,6 +108,12 @@ class MeetingTranscriber {
 
         this.elements.autoSave.addEventListener('change', () => this.saveSettings());
 
+        // オーディオソース変更時のヒント更新
+        this.elements.audioSource.addEventListener('change', (e) => {
+            this.updateFooterTip(e.target.value);
+            this.saveSettings();
+        });
+
         // モーダル
         this.elements.saveSpeakerBtn.addEventListener('click', () => this.saveSpeakerName());
         this.elements.cancelSpeakerBtn.addEventListener('click', () => this.hideModal());
@@ -133,11 +143,52 @@ class MeetingTranscriber {
         if (!this.transcription.isSupported()) {
             this.showError('このブラウザはWeb Speech APIをサポートしていません。Chrome または Edge をお使いください。');
             this.elements.startBtn.disabled = true;
+            return;
         }
 
+        // システム音声キャプチャが使えない場合はマイクモードに固定
         if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) {
-            this.showError('このブラウザは画面/タブ音声のキャプチャをサポートしていません。');
-            this.elements.startBtn.disabled = true;
+            this.elements.audioSource.value = 'mic';
+            // システム音声オプションを無効化
+            const systemOption = this.elements.audioSource.querySelector('option[value="system"]');
+            if (systemOption) {
+                systemOption.disabled = true;
+                systemOption.textContent = 'システム音声 (非対応)';
+            }
+        }
+
+        // デバイス検出
+        this.detectDevice();
+    }
+
+    /**
+     * デバイス検出とUIの最適化
+     */
+    detectDevice() {
+        const isMobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        if (isMobile) {
+            // モバイルではマイクモードを推奨
+            this.elements.audioSource.value = 'mic';
+            this.updateFooterTip('mic');
+
+            // システム音声をモバイルでは無効化
+            const systemOption = this.elements.audioSource.querySelector('option[value="system"]');
+            if (systemOption) {
+                systemOption.disabled = true;
+                systemOption.textContent = 'システム音声 (PC専用)';
+            }
+        }
+    }
+
+    /**
+     * フッターのヒントを更新
+     */
+    updateFooterTip(mode) {
+        if (mode === 'mic') {
+            this.elements.footerTip.textContent = '💡 ヒント: スマホではスピーカーから出る音をマイクで拾います。静かな環境で、スピーカー音量を上げてお使いください。';
+        } else {
+            this.elements.footerTip.textContent = '💡 ヒント: Chrome/Edgeで「タブの音声を共有」を選択すると、特定のタブの音声のみを録音できます。';
         }
     }
 
@@ -184,10 +235,12 @@ class MeetingTranscriber {
      */
     async startRecording() {
         try {
-            this.setStatus('processing', '音声ソースを選択中...');
+            const audioMode = this.elements.audioSource.value;
+            const modeText = audioMode === 'mic' ? 'マイクを準備中...' : '音声ソースを選択中...';
+            this.setStatus('processing', modeText);
 
             // 音声キャプチャを開始
-            await this.audioProcessor.startCapture();
+            await this.audioProcessor.startCapture(audioMode);
 
             // 音声レベルのコールバック
             this.audioProcessor.onAudioLevel = (level) => {
@@ -579,12 +632,18 @@ class MeetingTranscriber {
         if (settings) {
             try {
                 const parsed = JSON.parse(settings);
+                // オーディオソースは無効でなければ設定
+                const audioSourceOption = this.elements.audioSource.querySelector(`option[value="${parsed.audioSource}"]`);
+                if (audioSourceOption && !audioSourceOption.disabled) {
+                    this.elements.audioSource.value = parsed.audioSource || 'mic';
+                }
                 this.elements.language.value = parsed.language || 'ja-JP';
                 this.elements.speakerDetection.checked = parsed.speakerDetection !== false;
                 this.elements.autoSave.checked = parsed.autoSave !== false;
 
                 this.transcription.setLanguage(parsed.language || 'ja-JP');
                 this.speakerRecognition.setEnabled(parsed.speakerDetection !== false);
+                this.updateFooterTip(this.elements.audioSource.value);
             } catch (e) {
                 console.error('設定読み込みエラー:', e);
             }
@@ -605,6 +664,7 @@ class MeetingTranscriber {
      */
     saveSettings() {
         const settings = {
+            audioSource: this.elements.audioSource.value,
             language: this.elements.language.value,
             speakerDetection: this.elements.speakerDetection.checked,
             autoSave: this.elements.autoSave.checked

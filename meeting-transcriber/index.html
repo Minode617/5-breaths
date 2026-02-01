@@ -21,6 +21,13 @@
             <section class="settings-panel">
                 <h2>設定</h2>
                 <div class="setting-item">
+                    <label for="audioSource">音声入力:</label>
+                    <select id="audioSource">
+                        <option value="mic">マイク (スマホ対応)</option>
+                        <option value="system">システム音声 (PC専用)</option>
+                    </select>
+                </div>
+                <div class="setting-item">
                     <label for="language">言語:</label>
                     <select id="language">
                         <option value="ja-JP">日本語</option>
@@ -122,7 +129,7 @@
         </main>
 
         <footer>
-            <p>💡 ヒント: Chrome/Edgeブラウザで「タブの音声を共有」を選択すると、特定のタブの音声のみを録音できます。</p>
+            <p id="footerTip">💡 ヒント: スマホではマイク入力を選択し、スピーカーから出る音を拾って文字起こしします。</p>
         </footer>
     </div>
 

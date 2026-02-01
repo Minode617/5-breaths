@@ -1,6 +1,6 @@
 /**
- * AudioProcessor - システム音声のキャプチャと処理
- * getDisplayMedia APIを使用してタブ/画面の音声をキャプチャ
+ * AudioProcessor - 音声のキャプチャと処理
+ * マイク入力 または システム音声(getDisplayMedia)に対応
  */
 class AudioProcessor {
     constructor() {
@@ -11,66 +11,108 @@ class AudioProcessor {
         this.isCapturing = false;
         this.onAudioLevel = null;
         this.onAudioData = null;
+        this.captureMode = 'mic'; // 'mic' or 'system'
     }
 
     /**
-     * システム音声のキャプチャを開始
+     * 音声キャプチャを開始
+     * @param {string} mode - 'mic' (マイク) or 'system' (システム音声)
      */
-    async startCapture() {
+    async startCapture(mode = 'mic') {
+        this.captureMode = mode;
+
         try {
-            // getDisplayMediaでタブ/画面の音声をキャプチャ
-            this.mediaStream = await navigator.mediaDevices.getDisplayMedia({
-                video: {
-                    displaySurface: 'browser' // タブを優先
-                },
-                audio: {
-                    echoCancellation: false,
-                    noiseSuppression: false,
-                    autoGainControl: false,
-                    sampleRate: 16000
-                },
-                preferCurrentTab: false,
-                selfBrowserSurface: 'exclude',
-                systemAudio: 'include'
-            });
-
-            // 音声トラックがあるか確認
-            const audioTracks = this.mediaStream.getAudioTracks();
-            if (audioTracks.length === 0) {
-                throw new Error('音声トラックが見つかりません。「タブの音声を共有」を選択してください。');
+            if (mode === 'mic') {
+                await this.startMicCapture();
+            } else {
+                await this.startSystemCapture();
             }
+            return true;
+        } catch (error) {
+            console.error('音声キャプチャエラー:', error);
+            throw error;
+        }
+    }
 
-            // ビデオトラックを停止（音声のみ使用）
-            const videoTracks = this.mediaStream.getVideoTracks();
-            videoTracks.forEach(track => track.stop());
+    /**
+     * マイク入力でキャプチャ（スマホ対応）
+     */
+    async startMicCapture() {
+        // マイクの権限を取得
+        this.mediaStream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true
+            },
+            video: false
+        });
 
-            // AudioContextのセットアップ
-            this.audioContext = new (window.AudioContext || window.webkitAudioContext)({
-                sampleRate: 16000
-            });
+        await this.setupAudioContext();
+    }
 
-            this.analyser = this.audioContext.createAnalyser();
-            this.analyser.fftSize = 2048;
-            this.analyser.smoothingTimeConstant = 0.8;
+    /**
+     * システム音声でキャプチャ（PC専用）
+     */
+    async startSystemCapture() {
+        // getDisplayMediaでタブ/画面の音声をキャプチャ
+        this.mediaStream = await navigator.mediaDevices.getDisplayMedia({
+            video: {
+                displaySurface: 'browser'
+            },
+            audio: {
+                echoCancellation: false,
+                noiseSuppression: false,
+                autoGainControl: false
+            },
+            preferCurrentTab: false,
+            selfBrowserSurface: 'exclude',
+            systemAudio: 'include'
+        });
 
-            this.sourceNode = this.audioContext.createMediaStreamSource(this.mediaStream);
-            this.sourceNode.connect(this.analyser);
+        // 音声トラックがあるか確認
+        const audioTracks = this.mediaStream.getAudioTracks();
+        if (audioTracks.length === 0) {
+            throw new Error('音声トラックが見つかりません。「タブの音声を共有」を選択してください。');
+        }
 
-            this.isCapturing = true;
-            this.startLevelMonitoring();
+        // ビデオトラックを停止（音声のみ使用）
+        const videoTracks = this.mediaStream.getVideoTracks();
+        videoTracks.forEach(track => track.stop());
 
-            // トラック終了時のハンドリング
+        await this.setupAudioContext();
+    }
+
+    /**
+     * AudioContextをセットアップ
+     */
+    async setupAudioContext() {
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // AudioContextがsuspended状態の場合はresumeする（モバイル対応）
+        if (this.audioContext.state === 'suspended') {
+            await this.audioContext.resume();
+        }
+
+        this.analyser = this.audioContext.createAnalyser();
+        this.analyser.fftSize = 2048;
+        this.analyser.smoothingTimeConstant = 0.8;
+
+        this.sourceNode = this.audioContext.createMediaStreamSource(this.mediaStream);
+        this.sourceNode.connect(this.analyser);
+
+        this.isCapturing = true;
+        this.startLevelMonitoring();
+
+        // トラック終了時のハンドリング
+        const audioTracks = this.mediaStream.getAudioTracks();
+        if (audioTracks.length > 0) {
             audioTracks[0].onended = () => {
                 this.stopCapture();
                 if (this.onTrackEnded) {
                     this.onTrackEnded();
                 }
             };
-
-            return true;
-        } catch (error) {
-            console.error('音声キャプチャエラー:', error);
-            throw error;
         }
     }
 
