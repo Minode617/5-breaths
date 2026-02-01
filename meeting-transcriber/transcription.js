@@ -1,5 +1,6 @@
 /**
  * Transcription - Web Speech APIを使用したリアルタイム文字起こし
+ * モバイル対応版
  */
 class Transcription {
     constructor() {
@@ -9,18 +10,21 @@ class Transcription {
         this.utterances = [];
         this.currentUtterance = null;
         this.startTime = null;
+        this.restartCount = 0;
+        this.maxRestarts = 100;
 
         // コールバック
         this.onResult = null;
         this.onInterim = null;
         this.onError = null;
         this.onEnd = null;
+        this.onStatusChange = null;
 
         // ブラウザ互換性チェック
         this.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!this.SpeechRecognition) {
-            console.error('このブラウザはWeb Speech APIをサポートしていません');
-        }
+
+        // モバイル検出
+        this.isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     }
 
     /**
@@ -35,9 +39,6 @@ class Transcription {
      */
     setLanguage(lang) {
         this.language = lang;
-        if (this.recognition) {
-            this.recognition.lang = lang;
-        }
     }
 
     /**
@@ -52,64 +53,116 @@ class Transcription {
             return;
         }
 
+        this.startTime = Date.now();
+        this.restartCount = 0;
+        this.isRunning = true;
+
+        this.createRecognition();
+        this.startRecognition();
+    }
+
+    /**
+     * 認識インスタンスを作成
+     */
+    createRecognition() {
         this.recognition = new this.SpeechRecognition();
         this.recognition.lang = this.language;
-        this.recognition.continuous = true;
+        // モバイルでは continuous を false にして安定させる
+        this.recognition.continuous = !this.isMobile;
         this.recognition.interimResults = true;
         this.recognition.maxAlternatives = 1;
 
-        this.startTime = Date.now();
-        this.currentUtterance = null;
+        this.recognition.onstart = () => {
+            console.log('音声認識開始');
+            if (this.onStatusChange) {
+                this.onStatusChange('listening', '音声を聞いています...');
+            }
+        };
 
         this.recognition.onresult = (event) => {
             this.handleResult(event);
         };
 
         this.recognition.onerror = (event) => {
-            console.error('音声認識エラー:', event.error);
-            if (this.onError) {
-                this.onError(event.error);
+            console.log('音声認識エラー:', event.error);
+
+            // aborted と no-speech は正常なので無視
+            if (event.error === 'aborted') {
+                return;
             }
 
-            // no-speech エラーの場合は再起動
-            if (event.error === 'no-speech' && this.isRunning) {
-                this.restartRecognition();
+            if (event.error === 'no-speech') {
+                if (this.onStatusChange) {
+                    this.onStatusChange('waiting', '音声を待っています...');
+                }
+                return;
+            }
+
+            if (event.error === 'not-allowed') {
+                if (this.onError) {
+                    this.onError('マイクの使用が許可されていません。ブラウザの設定を確認してください。');
+                }
+                this.isRunning = false;
+                return;
+            }
+
+            if (this.onError) {
+                this.onError(event.error);
             }
         };
 
         this.recognition.onend = () => {
-            // 継続モードで終了した場合は再起動
-            if (this.isRunning) {
-                this.restartRecognition();
+            console.log('音声認識終了, isRunning:', this.isRunning);
+
+            if (this.isRunning && this.restartCount < this.maxRestarts) {
+                this.restartCount++;
+                // 少し待ってから再起動
+                setTimeout(() => {
+                    if (this.isRunning) {
+                        this.startRecognition();
+                    }
+                }, 300);
             } else if (this.onEnd) {
                 this.onEnd();
             }
         };
 
-        try {
-            this.recognition.start();
-            this.isRunning = true;
-        } catch (error) {
-            console.error('音声認識開始エラー:', error);
-            throw error;
-        }
+        this.recognition.onspeechstart = () => {
+            console.log('発話検出');
+            if (this.onStatusChange) {
+                this.onStatusChange('speaking', '認識中...');
+            }
+        };
+
+        this.recognition.onspeechend = () => {
+            console.log('発話終了');
+        };
     }
 
     /**
-     * 音声認識を再起動
+     * 認識を開始
      */
-    restartRecognition() {
-        if (!this.isRunning) return;
-
-        setTimeout(() => {
-            if (this.isRunning) {
-                try {
-                    this.recognition.start();
-                } catch (error) {
-                    console.error('再起動エラー:', error);
-                }
+    startRecognition() {
+        try {
+            this.recognition.start();
+        } catch (error) {
+            console.error('認識開始エラー:', error);
+            // already started エラーは無視
+            if (error.message && error.message.includes('already started')) {
+                return;
             }
-        }, 100);
+            // 少し待ってリトライ
+            setTimeout(() => {
+                if (this.isRunning) {
+                    this.createRecognition();
+                    try {
+                        this.recognition.start();
+                    } catch (e) {
+                        console.error('リトライ失敗:', e);
+                    }
+                }
+            }, 500);
+        }
     }
 
     /**
@@ -123,6 +176,8 @@ class Transcription {
             const transcript = result[0].transcript.trim();
             const confidence = result[0].confidence;
 
+            if (!transcript) continue;
+
             if (result.isFinal) {
                 // 確定結果
                 const utterance = {
@@ -130,7 +185,7 @@ class Transcription {
                     text: transcript,
                     timestamp: timestamp,
                     confidence: confidence,
-                    speakerId: null, // 後で設定
+                    speakerId: null,
                     speakerName: null,
                     isFinal: true
                 };
@@ -138,8 +193,14 @@ class Transcription {
                 this.utterances.push(utterance);
                 this.currentUtterance = null;
 
+                console.log('確定:', transcript);
+
                 if (this.onResult) {
                     this.onResult(utterance);
+                }
+
+                if (this.onStatusChange) {
+                    this.onStatusChange('listening', '音声を聞いています...');
                 }
             } else {
                 // 中間結果
@@ -165,7 +226,7 @@ class Transcription {
             try {
                 this.recognition.stop();
             } catch (error) {
-                console.error('停止エラー:', error);
+                // 無視
             }
             this.recognition = null;
         }
@@ -194,7 +255,7 @@ class Transcription {
     }
 
     /**
-     * 発言を更新（話者情報の追加など）
+     * 発言を更新
      */
     updateUtterance(id, updates) {
         const utterance = this.utterances.find(u => u.id === id);
@@ -224,7 +285,7 @@ class Transcription {
     exportAsText() {
         return this.utterances.map(u => {
             const time = this.formatTimestamp(u.timestamp);
-            const speaker = u.speakerName || '不明';
+            const speaker = u.speakerName || '話者';
             return `[${time}] ${speaker}: ${u.text}`;
         }).join('\n');
     }
@@ -244,12 +305,12 @@ class Transcription {
     }
 
     /**
-     * SRT形式でエクスポート（字幕用）
+     * SRT形式でエクスポート
      */
     exportAsSRT() {
         return this.utterances.map((u, index) => {
             const startTime = this.formatSRTTimestamp(u.timestamp);
-            const endTime = this.formatSRTTimestamp(u.timestamp + 3000); // 3秒間表示
+            const endTime = this.formatSRTTimestamp(u.timestamp + 3000);
             const speaker = u.speakerName || '話者';
 
             return `${index + 1}\n${startTime} --> ${endTime}\n${speaker}: ${u.text}\n`;
