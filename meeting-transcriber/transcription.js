@@ -75,8 +75,20 @@ class Transcription {
         this.recognition.onstart = () => {
             console.log('音声認識開始');
             if (this.onStatusChange) {
-                this.onStatusChange('listening', '音声を聞いています...');
+                this.onStatusChange('listening', '🎤 認識開始OK');
             }
+            // デバッグ用
+            if (this.onDebug) this.onDebug('認識エンジン起動');
+        };
+
+        this.recognition.onaudiostart = () => {
+            console.log('音声入力開始');
+            if (this.onDebug) this.onDebug('音声入力検出');
+        };
+
+        this.recognition.onsoundstart = () => {
+            console.log('音検出');
+            if (this.onDebug) this.onDebug('音を検出しました');
         };
 
         this.recognition.onresult = (event) => {
@@ -145,12 +157,19 @@ class Transcription {
         this.recognition.onspeechstart = () => {
             console.log('発話検出');
             if (this.onStatusChange) {
-                this.onStatusChange('speaking', '認識中...');
+                this.onStatusChange('speaking', '🔊 発話を検出！');
             }
+            if (this.onDebug) this.onDebug('発話を検出しました');
         };
 
         this.recognition.onspeechend = () => {
             console.log('発話終了');
+            if (this.onDebug) this.onDebug('発話終了、処理中...');
+        };
+
+        this.recognition.onnomatch = () => {
+            console.log('認識できませんでした');
+            if (this.onDebug) this.onDebug('音声を認識できませんでした');
         };
     }
 
@@ -186,6 +205,9 @@ class Transcription {
     handleResult(event) {
         const timestamp = Date.now() - this.startTime;
 
+        // デバッグ：結果受信を通知
+        if (this.onDebug) this.onDebug(`結果受信: ${event.results.length}件`);
+
         for (let i = event.resultIndex; i < event.results.length; i++) {
             const result = event.results[i];
             const transcript = result[0].transcript.trim();
@@ -209,13 +231,14 @@ class Transcription {
                 this.currentUtterance = null;
 
                 console.log('確定:', transcript);
+                if (this.onDebug) this.onDebug(`✅ 確定: "${transcript}"`);
 
                 if (this.onResult) {
                     this.onResult(utterance);
                 }
 
                 if (this.onStatusChange) {
-                    this.onStatusChange('listening', '音声を聞いています...');
+                    this.onStatusChange('listening', '🎤 次の音声を待機中...');
                 }
             } else {
                 // 中間結果
@@ -224,6 +247,8 @@ class Transcription {
                     timestamp: timestamp,
                     isFinal: false
                 };
+
+                if (this.onDebug) this.onDebug(`📝 中間: "${transcript}"`);
 
                 if (this.onInterim) {
                     this.onInterim(this.currentUtterance);
