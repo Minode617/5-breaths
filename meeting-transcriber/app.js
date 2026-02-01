@@ -198,17 +198,20 @@ class MeetingTranscriber {
     setupTranscriptionCallbacks() {
         // 確定結果
         this.transcription.onResult = (utterance) => {
-            // 話者を識別
-            const features = this.audioProcessor.getAudioFeatures();
-            if (features && this.elements.speakerDetection.checked) {
-                const speakerId = this.speakerRecognition.identifySpeaker(features);
-                if (speakerId) {
-                    const speaker = this.speakerRecognition.getSpeaker(speakerId);
-                    utterance.speakerId = speakerId;
-                    utterance.speakerName = speaker ? speaker.name : '不明';
-                    this.speakerRecognition.incrementUtteranceCount(speakerId);
+            // 話者を識別（AudioProcessorが動作している場合のみ）
+            if (this.audioProcessor.isActive() && this.elements.speakerDetection.checked) {
+                const features = this.audioProcessor.getAudioFeatures();
+                if (features) {
+                    const speakerId = this.speakerRecognition.identifySpeaker(features);
+                    if (speakerId) {
+                        const speaker = this.speakerRecognition.getSpeaker(speakerId);
+                        utterance.speakerId = speakerId;
+                        utterance.speakerName = speaker ? speaker.name : '不明';
+                        this.speakerRecognition.incrementUtteranceCount(speakerId);
+                    }
                 }
-            } else {
+            }
+            if (!utterance.speakerName) {
                 utterance.speakerName = '話者';
             }
 
@@ -224,8 +227,16 @@ class MeetingTranscriber {
 
         // エラー
         this.transcription.onError = (error) => {
-            if (error !== 'no-speech') {
-                console.error('文字起こしエラー:', error);
+            console.error('文字起こしエラー:', error);
+            this.setStatus('recording', 'エラー: ' + error);
+            // エラーを画面に表示
+            this.showToast('エラー: ' + error);
+        };
+
+        // ステータス変更
+        this.transcription.onStatusChange = (state, message) => {
+            if (this.isRecording) {
+                this.setStatus('recording', message);
             }
         };
     }
@@ -236,23 +247,32 @@ class MeetingTranscriber {
     async startRecording() {
         try {
             const audioMode = this.elements.audioSource.value;
-            const modeText = audioMode === 'mic' ? 'マイクを準備中...' : '音声ソースを選択中...';
-            this.setStatus('processing', modeText);
+            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+            this.setStatus('processing', '準備中...');
 
-            // 音声キャプチャを開始
-            await this.audioProcessor.startCapture(audioMode);
+            // モバイルのマイクモードではAudioProcessorをスキップ
+            // （Web Speech APIが自身でマイクにアクセスするため、競合を避ける）
+            let audioProcessorStarted = false;
+            if (!(isMobile && audioMode === 'mic')) {
+                try {
+                    await this.audioProcessor.startCapture(audioMode);
+                    audioProcessorStarted = true;
 
-            // 音声レベルのコールバック
-            this.audioProcessor.onAudioLevel = (level) => {
-                this.updateAudioLevel(level);
-            };
+                    // 音声レベルのコールバック
+                    this.audioProcessor.onAudioLevel = (level) => {
+                        this.updateAudioLevel(level);
+                    };
 
-            // トラック終了時
-            this.audioProcessor.onTrackEnded = () => {
-                this.stopRecording();
-            };
+                    // トラック終了時
+                    this.audioProcessor.onTrackEnded = () => {
+                        this.stopRecording();
+                    };
+                } catch (audioError) {
+                    console.log('AudioProcessor開始失敗:', audioError);
+                }
+            }
 
-            // 文字起こしを開始
+            // 文字起こしを開始（これがメイン）
             this.transcription.setLanguage(this.elements.language.value);
             this.transcription.start();
 
@@ -261,7 +281,7 @@ class MeetingTranscriber {
             this.recordingStartTime = Date.now();
             this.elements.startBtn.disabled = true;
             this.elements.stopBtn.disabled = false;
-            this.setStatus('recording', '録音中');
+            this.setStatus('recording', '話しかけてください...');
 
             // タイマー開始
             this.startTimer();
@@ -275,6 +295,12 @@ class MeetingTranscriber {
             const placeholder = this.elements.transcript.querySelector('.placeholder');
             if (placeholder) {
                 placeholder.remove();
+            }
+
+            // AudioProcessorなしの場合は音声レベルバーを薄く表示
+            if (!audioProcessorStarted) {
+                this.elements.audioLevel.style.width = '30%';
+                this.elements.audioLevel.style.opacity = '0.3';
             }
 
         } catch (error) {
