@@ -86,28 +86,43 @@ class Transcription {
         this.recognition.onerror = (event) => {
             console.log('音声認識エラー:', event.error);
 
-            // aborted と no-speech は正常なので無視
+            // aborted は正常なので無視
             if (event.error === 'aborted') {
                 return;
             }
 
             if (event.error === 'no-speech') {
                 if (this.onStatusChange) {
-                    this.onStatusChange('waiting', '音声を待っています...');
+                    this.onStatusChange('waiting', '話しかけてください...');
                 }
                 return;
             }
 
             if (event.error === 'not-allowed') {
                 if (this.onError) {
-                    this.onError('マイクの使用が許可されていません。ブラウザの設定を確認してください。');
+                    this.onError('マイクの使用が許可されていません');
+                }
+                this.isRunning = false;
+                return;
+            }
+
+            if (event.error === 'network') {
+                if (this.onError) {
+                    this.onError('ネットワークエラー。インターネット接続を確認してください');
+                }
+                return;
+            }
+
+            if (event.error === 'audio-capture') {
+                if (this.onError) {
+                    this.onError('マイクにアクセスできません');
                 }
                 this.isRunning = false;
                 return;
             }
 
             if (this.onError) {
-                this.onError(event.error);
+                this.onError('エラー: ' + event.error);
             }
         };
 
