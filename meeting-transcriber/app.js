@@ -239,6 +239,23 @@ class MeetingTranscriber {
                 this.setStatus('recording', message);
             }
         };
+
+        // デバッグ用：画面に状態を表示
+        this.transcription.onDebug = (message) => {
+            this.addDebugMessage(message);
+        };
+    }
+
+    /**
+     * デバッグメッセージを表示
+     */
+    addDebugMessage(message) {
+        const timestamp = new Date().toLocaleTimeString('ja-JP');
+        const div = document.createElement('div');
+        div.style.cssText = 'padding: 4px 8px; margin: 2px 0; background: #e0f2fe; border-radius: 4px; font-size: 12px; color: #0369a1;';
+        div.textContent = `[${timestamp}] ${message}`;
+        this.elements.transcript.appendChild(div);
+        this.elements.transcript.scrollTop = this.elements.transcript.scrollHeight;
     }
 
     /**
