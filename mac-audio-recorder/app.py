@@ -45,7 +45,9 @@ class AudioRecorderApp(rumps.App):
 
     def build_device_menu(self):
         """入力デバイスのサブメニューを構築"""
-        self.device_menu.clear()
+        # 既存のアイテムをクリア（初回は空なのでスキップ）
+        if hasattr(self.device_menu, '_menu') and self.device_menu._menu:
+            self.device_menu.clear()
 
         # 自動選択オプション
         auto_item = rumps.MenuItem(
