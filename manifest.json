@@ -1,12 +1,12 @@
 {
-  "name": "SNS Reflection Tracker",
-  "short_name": "SNS Reflect",
-  "description": "Track the gap between expectation and reality when using SNS",
+  "name": "5 Breaths - 呼吸管理",
+  "short_name": "5 Breaths",
+  "description": "マインドフルな呼吸で心を整える呼吸管理アプリ",
   "start_url": "/5-breaths/",
   "scope": "/5-breaths/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#0f1923",
+  "theme_color": "#1a2332",
   "orientation": "portrait",
   "icons": [
     {
@@ -22,13 +22,13 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["productivity", "lifestyle", "health"],
+  "categories": ["health", "lifestyle", "fitness"],
   "screenshots": [],
   "shortcuts": [
     {
-      "name": "New Record",
-      "short_name": "Record",
-      "description": "Track your SNS usage",
+      "name": "呼吸をはじめる",
+      "short_name": "開始",
+      "description": "呼吸セッションを開始する",
       "url": "/5-breaths/",
       "icons": [
         {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sns-tracker-v3';
+const CACHE_NAME = '5breaths-v1';
 const urlsToCache = [
   '/5-breaths/',
   '/5-breaths/index.html',
